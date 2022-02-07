@@ -1,6 +1,3 @@
-import math
-
-
 def insertionSort(a):
     for i in range(len(a)):
         index = i - 1
@@ -21,6 +18,14 @@ def selectionSort(a):
         if i != min_index:
             a[i], a[min_index] = a[min_index], a[i]
     return (a)
+
+
+def BubbleSort(a):
+    for i in range(len(a) - 1):
+        for j in range(len(a) - i - 1):
+            if a[j] > a[j + 1]:
+                a[j], a[j + 1] = a[j + 1], a[j]
+    return a
 
 
 def merge(a, p, q, m):  # a[p...q], a[(q+1)...m]
@@ -45,7 +50,7 @@ def merge(a, p, q, m):  # a[p...q], a[(q+1)...m]
 
 def mergeSort(a, p, m):
     if (p < m):
-        q = math.floor((p + m) / 2)
+        q = (p + m) // 2
         mergeSort(a, p, q)
         mergeSort(a, q + 1, m)
         merge(a, p, q, m)
@@ -54,17 +59,6 @@ def mergeSort(a, p, m):
 def binarySearch(a, x):
     n = len(a)
     l, r = 0, n
-    # for i in range(n):
-    #     if l > r or mid >= n:
-    #         return None
-    #     if a[mid] == x:
-    #         return mid
-    #     elif a[mid] < x:
-    #         l = mid + 1
-    #         mid = (l + r) // 2
-    #     else:
-    #         r = mid - 1
-    #         mid = (l + r) // 2
     while l <= r:
         mid = (l + r) // 2
         if mid < n:
@@ -79,13 +73,67 @@ def binarySearch(a, x):
     return None
 
 
-a = [22, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70]
-# a = [5, 2, 4, 7, 1, 3, 2, 6]
-a1 = insertionSort(a)
-print('Insertion Sort:', a1)
-a2 = selectionSort(a)
-print('Selection Sort:', a2)
-mergeSort(a, 0, len(a) - 1)
-print('Merge Sort:', a)
-s = binarySearch(a, a[8])
-print(s)
+# Given a theta(nlgn) time algorithm for determining whether there exist two elements in a set S whose sum is exactly value x.
+def checkSum(a, x):
+    mergeSort(a, 0, len(a) - 1)
+    # for i in range(len(a)):
+    #     if binarySearch(a, x - a[i]):
+    #         return [a[i], x - a[i]]
+    i, j = 0, len(a) - 1
+    while i < j:
+        if a[i] + a[j] == x:
+            return [a[i], a[j]]
+        elif a[i] + a[j] < x:
+            i += 1
+        else:
+            j -= 1
+    return None
+
+
+# Give an algorithm that determines the number of inversions in any permutation on n elements in Θ(nlgn) worst-case time.
+def inversions(a, p, q, m):  # a[p...q], a[(q+1)...m]
+    l = a[p:q + 1]
+    r = a[q + 1:m + 1]
+    i, j = 0, 0
+    num = 0
+    for k in range(p, m + 1):
+        if i < len(l) and j < len(r):
+            if l[i] <= r[j]:
+                a[k] = l[i]
+                i += 1
+            else:
+                a[k] = r[j]
+                j += 1
+                num += (len(l) - i)
+        elif i == len(l):
+            a[k:m + 1] = r[j:]
+            break
+        else:
+            a[k:m + 1] = l[i:]
+            break
+    return num
+
+
+def inversionNum(a, p, m):
+    num = 0
+    if (p < m):
+        q = (p + m) // 2
+        num += inversionNum(a, p, q)
+        num += inversionNum(a, q + 1, m)
+        num += inversions(a, p, q, m)
+    return num
+
+
+A = [22, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70]
+# insertionSort(A)
+# print('Insertion Sort:', A)
+# selectionSort(A)
+# print('Selection Sort:', A)
+mergeSort(A, 0, len(A) - 1)
+print('Merge Sort:', A)
+s = binarySearch(A, A[8])
+print('Binary Search:',s)
+A = [22, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70]
+print(checkSum(A, 10))
+Inverse = [2, 3, 8, 6, 1]
+print(inversionNum(Inverse, 0, len(Inverse) - 1))
