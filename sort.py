@@ -1,3 +1,6 @@
+import random
+
+
 def insertionSort(a):
     for i in range(len(a)):
         index = i - 1
@@ -56,6 +59,7 @@ def mergeSort(a, p, m):
         merge(a, p, q, m)
 
 
+# Exercise 2.3-5
 def binarySearch(a, x):
     n = len(a)
     l, r = 0, n
@@ -73,6 +77,7 @@ def binarySearch(a, x):
     return None
 
 
+# Exercise 2.3-7
 # Given a theta(nlgn) time algorithm for determining whether there exist two elements in a set S whose sum is exactly value x.
 def checkSum(a, x):
     mergeSort(a, 0, len(a) - 1)
@@ -90,6 +95,7 @@ def checkSum(a, x):
     return None
 
 
+# Problem 2-4
 # Give an algorithm that determines the number of inversions in any permutation on n elements in Θ(nlgn) worst-case time.
 def inversions(a, p, q, m):  # a[p...q], a[(q+1)...m]
     l = a[p:q + 1]
@@ -124,6 +130,33 @@ def inversionNum(a, p, m):
     return num
 
 
+def partition(a, p, r):
+    x = a[r]
+    i = p - 1
+    count = 0
+    for j in range(p, r):
+        if a[j] <= x:
+            i += 1
+            a[i], a[j] = a[j], a[i]
+        if a[j] == x:
+            count += 1
+    a[i + 1], a[r] = a[r], a[i + 1]
+    return i + 1 - count // 2
+
+
+def randomizedPartition(a, p, r):
+    i = random.randint(p, r)
+    a[i], a[r] = a[r], a[i]
+    return partition(a, p, r)
+
+
+def quickSort(a, p, r):
+    if p < r:
+        q = partition(a, p, r)
+        quickSort(a, p, q - 1)
+        quickSort(a, q + 1, r)
+
+
 A = [22, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70]
 # insertionSort(A)
 # print('Insertion Sort:', A)
@@ -132,8 +165,11 @@ A = [22, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70]
 mergeSort(A, 0, len(A) - 1)
 print('Merge Sort:', A)
 s = binarySearch(A, A[8])
-print('Binary Search:',s)
+print('Binary Search:', s)
 A = [22, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70]
 print(checkSum(A, 10))
 Inverse = [2, 3, 8, 6, 1]
 print(inversionNum(Inverse, 0, len(Inverse) - 1))
+A = [22, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70, 55]
+quickSort(A, 0, len(A) - 1)
+print('Quick Sort:', A)

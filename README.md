@@ -5,6 +5,8 @@
 
 **55** Jump Game *(Medium)*
 
+**剑指 Offer 42** 连续子数组的最大和 Maximum sum of contiguous subarrays *(Easy)*
+
 ## Backtracking
 **51** N-Queens *(Hard)*
 
@@ -18,3 +20,5 @@
 ## Breath-First Search, BFS
 
 ## Sorting
+
+## Divide-and-Conquer, DC
