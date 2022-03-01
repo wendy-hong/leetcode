@@ -1,9 +1,9 @@
 import random
 import argparse
 
-parser = argparse.ArgumentParser(description='sort')
-parser.add_argument('-method', type=int, default=0)
-args = parser.parse_args()
+# parser = argparse.ArgumentParser(description='sort')
+# parser.add_argument('-method', type=int, default=0)
+# args = parser.parse_args()
 
 
 class sort(object):
@@ -179,19 +179,21 @@ class linearsort(object):
             t = int(n * a[i])
             b[t].append(a[i])
         ans = []
+        t = sort()
         for i in range(n):
-            sort.insertionSort(self, b[i])
+            t.insertionSort(b[i])
             ans = ans + b[i]
         ans = [int(ans[i] * tmp) for i in range(n)]
         return ans
 
 
-A = [22, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70]
-A1 = [2, 5, 3, 0, 2, 3, 0, 3]
-sort1 = sort()
-sort2 = mergesort()
-sort3 = quicksort()
-sort4 = linearsort()
-# sort2.mergeSort(A, 0, len(A) - 1)
-# sort3.quickSort(A, 0, len(A) - 1)
-print(sort4.bucketSort(A1))
+if __name__ == '__main__':
+    A = [22, 34, 3, 32, 82, 55, 89, 50, 37, 5, 64, 35, 9, 70]
+    A1 = [2, 5, 3, 0, 2, 3, 0, 3]
+    sort1 = sort()
+    sort2 = mergesort()
+    sort3 = quicksort()
+    sort4 = linearsort()
+    # sort2.mergeSort(A, 0, len(A) - 1)
+    # sort3.quickSort(A, 0, len(A) - 1)
+    print(sort4.bucketSort(A1))
