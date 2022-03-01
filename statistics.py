@@ -1,3 +1,4 @@
+import math
 from leetcode.sort2 import quicksort
 
 
@@ -66,7 +67,7 @@ class Median(object):
         A[i], A[-1] = A[-1], A[i]  # ele is always at the end of the array
         return i
 
-    def selectMedian(self, A, n):  # n is the index of the median of sorted A
+    def selectMedian(self, A, n):  # return the element which has n numbers in A less than itself
         if len(A) <= 1:
             return A[0]
         medians = []
@@ -90,23 +91,64 @@ class Median(object):
     def findMedian(self, A):
         return Median.selectMedian(self, A[:], Median.median_index(self, len(A)))
 
+    # Exercise 9.3-5
+    # return the element of A, which has n elements in A less than itself
+    def arbiSelection(self, A, n):
+        med = Median.findMedian(self, A)
+        smaller = [item for item in A if item < med]
+        larger = [item for item in A if item > med]
+        if len(smaller) == n:
+            return med
+        elif len(smaller) > n:
+            return Median.arbiSelection(self, smaller, n)
+        else:
+            return Median.arbiSelection(self, list(larger), n - len(smaller) - 1)
 
-# Exercise 9.3-5
-def arbiSelection(A, n):  # return the element of A, which has n elements in A less than itself
-    m = Median()
-    med = m.findMedian(A)
-    smaller = [item for item in A if item < med]
-    larger = [item for item in A if item > med]
-    if len(smaller) == n:
-        return med
-    elif len(smaller) > n:
-        return arbiSelection(smaller, n)
+
+# Exercise 9.3-6
+def kthQuantiles(A, k):
+    t = Median()
+    if k == 1:
+        return []
+    elif k % 2:  # odd
+        n = len(A)
+        left_index = math.ceil((k // 2) * (n / k)) - 1
+        right_index = n - left_index - 1
+        left = t.selectMedian(A, left_index)
+        right = t.selectMedian(A, right_index)
+        t.partition(A, left)
+        lower = kthQuantiles(A[:left], k // 2)
+        t.partition(A, right)
+        upper = kthQuantiles(A[right + 1:], k // 2)
+        return lower + [left, right] + upper
     else:
-        return arbiSelection(list(larger), n - len(smaller) - 1)
+        index = t.median_index(len(A))
+        median = t.selectMedian(A, index)
+        t.partition(A, median)
+        return kthQuantiles(A[:index], k // 2) + [median] + kthQuantiles(A[index + 1:], k // 2)
+
+
+# Exercise 9.3-7
+def k_close2median(A, k):
+    t = Median()
+    med = t.findMedian(A)
+    abs_items = []
+    result = []
+    for element in A:
+        abs_items.append(abs(element - med))
+    threshold = t.arbiSelection(abs_items, k - 1)
+    for i in range(len(A)):
+        if abs_items[i] <= threshold:
+            result.append(A[i])
+    return result
 
 
 if __name__ == '__main__':
-    A = [10, 22, 34, 3, 32, 82]
-    s = select()
-    print(s.randomizedSelect(A, 0, len(A) - 1, 3))
-    print(arbiSelection(A, 3))
+    A = [20, 11, 2, 3, 5, 6, 10]
+    # s = select()
+    # print(s.randomizedSelect(A, 0, len(A) - 1, 3))
+    m = Median()
+    print(m.arbiSelection(A, 2))
+    # B = [2, 6, 4, 8, 1, 9, 5]
+    # print(kthQuantiles(B, 4))
+    # print(k_close2median(A, 3))
